@@ -13,7 +13,7 @@ import java.sql.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @Slf4j
 public class Order {
 
@@ -31,9 +31,10 @@ public class Order {
     private List<OrderItem> orderItems;                     //사용하지 않고 직접 따로 저장하기로
 
     @Enumerated
-    private OrderState state;
+    private OrderState orderState;
 
     @OneToOne // 1:1 관계라서 cascade 사용에 전혀 문제 없음
+    @JoinColumn(name="delivery_id")
     private Delivery delivery; //배송지
 
     private Date regDate; //등록날짜

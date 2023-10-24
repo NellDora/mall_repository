@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <link th:href="@{/css/style.css}" rel="stylesheet" href="test1.css">
+    <link th:href="@{/css/slide.css}" rel="stylesheet" href="test1.css">
+</head>
+<body>
+
+    <div class="top-container">
+        <div class="logo-container">
+            <div class="logo"></div>
+        </div>
+        <div class="util-container">
+            <div class=""><button onclick="Login();" id="loginButton" value="로그인">로그인</button></div>
+        </div>
+    </div>
+    <div class="main-container">
+        <div>
+            <form th:object="${loginDTO}" method="post">
+                <div>
+                    <span>아이디 : <input type="text" th:field="*{id}"></span><br>
+                    <span>비밀번호 : <input type="password" th:field="*{password}"></span><br>
+                    <span><input type="submit" value="로그인">제출</span><br>
+                    <span><button type="button" onclick="">취소</button></span>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/slide.js"></script>
+    <script src="/js/util.js"></script>
+</body>
+</html>
