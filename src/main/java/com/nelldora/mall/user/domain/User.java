@@ -58,7 +58,7 @@ public class User {
     }
 
     //이게 맞는지는 모르겠지만 순간적으로 동시에 만들어지는 것을 방지하기 위한 아이디 생성 static 처리
-    public static void createUser(String id ,String name,String password, String nickname, int age, String telephone){
+    public static User createUser(String id ,String name,String password, String nickname, int age, String telephone){
         User user = new User();
         user.id = id;
         user.password= password;
@@ -66,7 +66,7 @@ public class User {
         user.nickName = nickname;
         user.age = age;
         user.telephone = telephone;
-
+        return user;
     }
 
 

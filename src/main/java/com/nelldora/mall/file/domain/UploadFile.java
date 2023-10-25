@@ -10,9 +10,9 @@ public class UploadFile {
 
     private Board board;
 
-    private String originalFile;
+    private String originalFileName;
 
-    private String storeFile;
+    private String saveFileName;
 
     private LocalDateTime regDate;
 }

@@ -3,11 +3,11 @@ package com.nelldora.mall.user.repository;
 import com.nelldora.mall.user.domain.User;
 import com.querydsl.core.QueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 @Repository
 @Slf4j
@@ -30,10 +30,17 @@ public class JpaUserRepository implements UserRepository{
     }
 
     @Override
-    public User findById(String id) {
+    public User findByNum(int id) {
         User findUser = em.find(User.class,id);
-        log.info("UserRepository : 저장 완료");
+        log.info("UserRepository : 조회 완료");
         return findUser;
     }
 
+    @Override
+    public List<User> findById(String id) {
+        String jpql = "select t from User t where t.id = :id";
+        return em.createQuery("select t from User t where t.id = :id")
+                .setParameter("id", id)
+                .getResultList();
+    }
 }
