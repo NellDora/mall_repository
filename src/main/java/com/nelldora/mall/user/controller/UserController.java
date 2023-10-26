@@ -1,5 +1,6 @@
 package com.nelldora.mall.user.controller;
 
+import com.nelldora.mall.session.SESSION_CON;
 import com.nelldora.mall.user.domain.User;
 import com.nelldora.mall.user.dto.UserDTO;
 import com.nelldora.mall.user.exception.IdDuplicationException;
@@ -9,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -25,7 +23,16 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/login")
+    @GetMapping("/main")
+    public String main(){
+        return "/mall-items";
+    }
+
+    @GetMapping("/main2")
+    public String main2(){
+        return "/mall-login";
+    }
+    @GetMapping("/join")
     public String joinView(Model model)
     {
         model.addAttribute("userDTO", new UserDTO());
@@ -33,9 +40,11 @@ public class UserController {
 
     }
 
-    @PostMapping("/login")
-    public String joinAction(@ModelAttribute("userDTO")UserDTO userDTO, HttpServletResponse response) throws IOException {
+    //회원가입 처리
+    @PostMapping("/join")
+    public String joinAction(@ModelAttribute(value = "userDTO")UserDTO userDTO, HttpServletResponse response) throws IOException {
 
+        log.info("입력 받은 값 = {}, {}, {}, {}",userDTO.getId(),userDTO.getPasswordOne(), userDTO.getPasswordTwo(), userDTO.getTelephone());
         //우선 아이디 중복 확인
         try {
             userService.duplicateCheckId(userDTO.getId());
@@ -63,13 +72,15 @@ public class UserController {
             advise.write("<script>history.back();</script>");
             advise.flush();
         }
-
-        //userDTO -> user 전환
-
-       userService.save(User.createUser(userDTO.getId(),userDTO.getName(),userDTO.getPasswordOne(), userDTO.getNickName(), userDTO.getAge(), userDTO.getTelephone()));
+        //userDTO -> user 전환 저장
+       userService.save(userDTO);
 
 
         return "redirect:/main";
     }
 
+    //회원탈퇴 처리
+    public String quit(@RequestParam("password")String password, @SessionAttribute(SESSION_CON.LOGIN_USER) User loginUser){
+        return null;
+    }
 }

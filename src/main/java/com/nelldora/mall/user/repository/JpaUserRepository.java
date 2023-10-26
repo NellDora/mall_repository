@@ -5,12 +5,14 @@ import com.querydsl.core.QueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
 @Slf4j
+@Transactional
 public class JpaUserRepository implements UserRepository{
 
     private final EntityManager em;
@@ -25,7 +27,7 @@ public class JpaUserRepository implements UserRepository{
 
     @Override
     public void save(User user) {
-        em.persist(em);
+        em.persist(user);
         log.info("UserRepository : 저장 완료");
     }
 

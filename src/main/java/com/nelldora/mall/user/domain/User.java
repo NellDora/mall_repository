@@ -58,14 +58,20 @@ public class User {
     }
 
     //이게 맞는지는 모르겠지만 순간적으로 동시에 만들어지는 것을 방지하기 위한 아이디 생성 static 처리
-    public static User createUser(String id ,String name,String password, String nickname, int age, String telephone){
+    public static User createUser(String id ,String name,String password, String nickname, String telephone){
         User user = new User();
         user.id = id;
         user.password= password;
         user.name = name;
         user.nickName = nickname;
-        user.age = age;
         user.telephone = telephone;
+        user.grade = Grade.BRONZE;
+        user.balance = 0;
+
+        // 나머지는 임시
+        user.nickName = "호우";
+        user.address = "메우";
+        user.age = 100;
         return user;
     }
 
@@ -89,7 +95,8 @@ public class User {
     }
 
 
-
-
-
+    @Override
+    public String toString() {
+        return new String("Id : "+id +", passward: "+password +", nickname : "+nickName +", adress : "+address +", telephone : "+telephone +", grade : "+grade +", balance : "+ balance);
+    }
 }

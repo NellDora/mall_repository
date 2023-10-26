@@ -33,7 +33,6 @@ public class UserDTO {
         this.passwordOne = user.getPassword();
         this.name = user.getName();
         this.nickName = user.getNickName();
-        this.age = user.getAge();
         this.address = user.getAddress();
         this.telephone = user.getTelephone();
         this.balance = user.getBalance();
@@ -93,5 +92,62 @@ public class UserDTO {
 
     public String getTelephone() {
         return telephone;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setPasswordOne(String passwordOne) {
+        this.passwordOne = passwordOne;
+    }
+
+    public void setPasswordTwo(String passwordTwo) {
+        this.passwordTwo = passwordTwo;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
+    public void setJoinDate(Date joinDate) {
+        this.joinDate = joinDate;
+    }
+
+    public void setOrderList(List<Order> orderList) {
+        this.orderList = orderList;
+    }
+
+    public void setBoardList(List<Board> boardList) {
+        this.boardList = boardList;
+    }
+
+    public void setGrade(Grade grade) {
+        this.grade = grade;
+    }
+
+    @Override
+    public String toString() {
+        return new String("Id : "+id +", passward: "+passwordOne +", nickname : "+nickName +", adress : "+address +", telephone : "+telephone +", grade : "+grade +", balance : "+ balance);
     }
 }
