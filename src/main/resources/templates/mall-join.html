@@ -39,9 +39,19 @@
         <div>
           <form action="" th:action th:object="${userDTO}" method="post">
             <div class="input-group flex-nowrap w-50">
-              <span class="input-group-text" id="addon-wrapping1" style="width: 130px; ">아이디 </span>
-              <input type="text" th:field="*{id}" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping"><button type="button" class="btn btn-secondary">아이디 중복확인</button>
+              <span class="input-group-text" id="user-id" style="width: 130px; ">아이디 </span>
+              <input type="text" th:field="*{id}" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping"><button type="submit" class="btn btn-secondary" id="dupCheckBtn">아이디 중복확인</button>
+
+                <div>
+                    <script>
+                        if(checkResult=="NOPASS"){
+                        document.write("중복된 아이디입니다");
+                        }
+                    </script>
+                </div>
+
             </div>
+
             가나다라마바사
             <div class="input-group flex-nowrap w-50">
               <span class="input-group-text" id="addon-wrapping2" style="width: 130px; margin-top: 2%;">비밀번호</span>
@@ -81,6 +91,37 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+
+       var checkResult;
+       getReplyList();
+       $(document).ready(function(){
+            getIdCheckResult();
+            })
+
+        $("#dupCheckBtn").click(function(){
+            const userId=$('#user-id').val();
+            const result=[[${idDuplicateResult}]]
+
+            //ajax 시작
+            $.ajax({
+            type:"GET",
+            url:"/idCheck",
+            data:{"checkId" : userId},
+
+            //성공했을 때
+            success:function(data){
+                checkResult = idCheckResult;
+                } //success end point
+
+            }) //ajax end point
+
+
+        };//function End
+
+    </script>
+
+    </script>
 </body>
 </html>
 
