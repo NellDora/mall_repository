@@ -12,7 +12,7 @@ public class UploadFile {
 
     private String originalFileName;
 
-    private String saveFileName;
+    private String serverFileName;
 
     private LocalDateTime regDate;
 }

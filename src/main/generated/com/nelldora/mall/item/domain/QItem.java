@@ -18,11 +18,15 @@ public class QItem extends EntityPathBase<Item> {
 
     private static final long serialVersionUID = 2012403244L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QItem item = new QItem("item");
 
     public final StringPath description = createString("description");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final QItemCategory itemCategory;
 
     public final StringPath name = createString("name");
 
@@ -33,15 +37,24 @@ public class QItem extends EntityPathBase<Item> {
     public final NumberPath<Integer> stock = createNumber("stock", Integer.class);
 
     public QItem(String variable) {
-        super(Item.class, forVariable(variable));
+        this(Item.class, forVariable(variable), INITS);
     }
 
     public QItem(Path<? extends Item> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QItem(PathMetadata metadata) {
-        super(Item.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QItem(PathMetadata metadata, PathInits inits) {
+        this(Item.class, metadata, inits);
+    }
+
+    public QItem(Class<? extends Item> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.itemCategory = inits.isInitialized("itemCategory") ? new QItemCategory(forProperty("itemCategory")) : null;
     }
 
 }

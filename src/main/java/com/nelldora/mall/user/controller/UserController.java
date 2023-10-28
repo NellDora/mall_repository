@@ -46,36 +46,40 @@ public class UserController {
 
         log.info("입력 받은 값 = {}, {}, {}, {}",userDTO.getId(),userDTO.getPasswordOne(), userDTO.getPasswordTwo(), userDTO.getTelephone());
         //우선 아이디 중복 확인
+        int nextProcess = 0;
         try {
             userService.duplicateCheckId(userDTO.getId());
         } catch (IdDuplicationException e) {
             log.info("User Controller : 아이디 중복 문제 발생 : ={} ", e);
+            nextProcess=1;
             response.setContentType("text/html; charset=utf-8");
             String message = "이미 존재하는 아이디입니다..";
-
             PrintWriter advise = response.getWriter();
             advise.write("<script>alert('"+message+"');</script>");
             advise.write("<script>history.back();</script>");
             advise.flush();
         }
 
-        //비밀번호 검증 확인
-        try {
-            userService.joinPasswordCheck(userDTO.getPasswordOne(), userDTO.getPasswordTwo());
-        } catch (PasswordCheckFailException e) {
-            log.info("User Controller : 비밀번호 검증 문제 발생 : ={} ", e);
-            response.setContentType("text/html; charset=utf-8");
-            String message = "비밀번호가 다릅니다.";
+        if(nextProcess!=1){
+            //비밀번호 검증 확인
+            try {
+                userService.joinPasswordCheck(userDTO.getPasswordOne(), userDTO.getPasswordTwo());
+            } catch (PasswordCheckFailException e) {
+                log.info("User Controller : 비밀번호 검증 문제 발생 : ={} ", e);
+                response.setContentType("text/html; charset=utf-8");
+                String message = "비밀번호가 다릅니다.";
 
-            PrintWriter advise = response.getWriter();
-            advise.write("<script>alert('"+message+"');</script>");
-            advise.write("<script>history.back();</script>");
-            advise.flush();
+                PrintWriter advise = response.getWriter();
+                advise.write("<script>alert('"+message+"');</script>");
+                advise.write("<script>history.back();</script>");
+                advise.flush();
+            }
+            //userDTO -> user 전환 저장
+            userService.save(userDTO);
+
+
+
         }
-        //userDTO -> user 전환 저장
-       userService.save(userDTO);
-
-
         return "redirect:/main";
     }
 

@@ -4,6 +4,7 @@ import com.nelldora.mall.user.exception.IdDuplicationException;
 import com.nelldora.mall.user.service.UserService;
 import com.nelldora.mall.user.vo.IdDuplicateResult;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +12,16 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class UserAjaxController {
 
     private final UserService userService;
 
     @ResponseBody
-    @GetMapping(value = "idCheck", produces = "application/json; charset=utf8")
-    public ResponseEntity<IdDuplicateResult> AjaxIdDuplicateCheck(String checkId){
-
+    @PostMapping(value = "/idCheck")
+    public IdDuplicateResult AjaxIdDuplicateCheck(String checkId){
+        log.info("UserServiceAjax : 중복확인 동작");
+        log.info("UserServiceAjax : 전달 받은 ID 값 = {}", checkId);
         IdDuplicateResult idDuplicateResult;
 
         try {
@@ -27,7 +30,7 @@ public class UserAjaxController {
         } catch (IdDuplicationException e) {
             idDuplicateResult=IdDuplicateResult.NOPASS;
         }
-        return new ResponseEntity<>(idDuplicateResult, HttpStatus.OK);
+        return idDuplicateResult;
 
     }
 }

@@ -1,10 +1,13 @@
 package com.nelldora.mall.file.save;
 
 import com.nelldora.mall.file.domain.UploadFile;
+import com.nelldora.mall.file.vo.TransFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class FileSave {
@@ -32,11 +35,21 @@ public class FileSave {
         return uuid+"."+ext;
     }
 
-    public UploadFile saveFile(MultipartFile multipartFile) throws IOException {
+    public TransFile saveFile(MultipartFile multipartFile) throws IOException {
         String originalFileName = multipartFile.getOriginalFilename();
-        String saveFileName = nameConverter(originalFileName);
-        multipartFile.transferTo(new File(getFullPath(saveFileName)));
-        return new UploadFile();
+        String serverFileName = nameConverter(originalFileName);
+        multipartFile.transferTo(new File(getFullPath(serverFileName)));
+        return new TransFile(originalFileName, serverFileName);
+    }
+
+    public List<TransFile> saveFiles(List<MultipartFile> multipartFiles) throws IOException {
+        List<TransFile> transFileList = new ArrayList<>();
+        for (MultipartFile multipartFile : multipartFiles){
+            if (!multipartFile.isEmpty()){
+                transFileList.add(saveFile(multipartFile));
+            }
+        }
+        return transFileList;
     }
 
 }
