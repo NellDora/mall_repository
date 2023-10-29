@@ -28,6 +28,10 @@ public class ItemDTO {
 
     private List<OrderItem> orderItems;
 
+
+    public ItemDTO() {
+    }
+
     public ItemDTO(Item item) {
         this.id = item.getId();
         this.name = item.getName();

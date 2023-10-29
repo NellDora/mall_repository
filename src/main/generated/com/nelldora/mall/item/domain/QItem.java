@@ -28,11 +28,15 @@ public class QItem extends EntityPathBase<Item> {
 
     public final QItemCategory itemCategory;
 
+    public final StringPath itemCode = createString("itemCode");
+
     public final StringPath name = createString("name");
 
     public final ListPath<com.nelldora.mall.order.domain.OrderItem, com.nelldora.mall.order.domain.QOrderItem> orderItems = this.<com.nelldora.mall.order.domain.OrderItem, com.nelldora.mall.order.domain.QOrderItem>createList("orderItems", com.nelldora.mall.order.domain.OrderItem.class, com.nelldora.mall.order.domain.QOrderItem.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);
+
+    public final DateTimePath<java.time.LocalDateTime> regDate = createDateTime("regDate", java.time.LocalDateTime.class);
 
     public final NumberPath<Integer> stock = createNumber("stock", Integer.class);
 

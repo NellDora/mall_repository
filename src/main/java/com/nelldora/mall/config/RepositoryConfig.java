@@ -2,6 +2,8 @@ package com.nelldora.mall.config;
 
 import com.nelldora.mall.board.repository.BoardRepository;
 import com.nelldora.mall.board.repository.JpaBoardRepository;
+import com.nelldora.mall.file.repository.FileRepository;
+import com.nelldora.mall.file.repository.JpaFileRepository;
 import com.nelldora.mall.item.repository.ItemCategoryRepository;
 import com.nelldora.mall.item.repository.ItemRepository;
 import com.nelldora.mall.item.repository.JpaItemCategoryRepository;
@@ -37,5 +39,10 @@ public class RepositoryConfig {
     @Bean
     public ItemCategoryRepository itemCategoryRepository(){
         return new JpaItemCategoryRepository(em);
+    }
+
+    @Bean
+    public FileRepository fileRepository(){
+        return new JpaFileRepository(em);
     }
 }

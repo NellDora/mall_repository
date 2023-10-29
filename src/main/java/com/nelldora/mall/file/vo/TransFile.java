@@ -1,5 +1,8 @@
 package com.nelldora.mall.file.vo;
 
+import lombok.Data;
+
+@Data
 public class TransFile {
 
     private String originalName;

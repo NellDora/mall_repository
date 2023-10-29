@@ -10,14 +10,17 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 import static com.nelldora.mall.item.domain.QItem.item;
 
 @Repository
+@Transactional
 public class JpaItemRepository implements ItemRepository{
 
     private final EntityManager em;
@@ -40,10 +43,25 @@ public class JpaItemRepository implements ItemRepository{
 
 
     @Override
+    public Optional<Item> findByCode(String code) {
+        List<Item> items = em.createQuery("select t from Item t where t.itemCode = :code",Item.class)
+                .setParameter("code",code)
+                .getResultList();
+        return items.stream().findAny();
+    }
+
+    @Override
+    public List<Item> findByAll(){
+        List<Item> items = em.createQuery("select t from Item t" , Item.class)
+                .getResultList();
+        return items;
+    }
+
+    @Override
     public List<Item> findByCategory(ItemCategory itemCategory) {
         QItem item = QItem.item;
         QItemCategory category =QItemCategory.itemCategory;
-        List<Item> items = query.select(item).from(item).join(category).fetch();
+        List<Item> items = query.select(item).from(item).join(item.itemCategory,category).on(category.categoryName.eq(itemCategory.getCategoryName())).fetch();
         return items;
     }
 
@@ -51,7 +69,8 @@ public class JpaItemRepository implements ItemRepository{
     public List<Item> findByNameAndCategory(String itemName, ItemCategory itemCategory) {
         QItem item = QItem.item;
         QItemCategory category = QItemCategory.itemCategory;
-        List<Item> items = query.select(item).from(item).where(likeItemName(itemName)).join(category).fetch();
+        List<Item> items = query.select(item).from(item).where(likeItemName(itemName)).join(item.itemCategory,category)
+                .on(category.categoryName.eq(itemCategory.getCategoryName())).fetch();
         return items;
     }
 

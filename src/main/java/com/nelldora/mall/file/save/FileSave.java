@@ -1,7 +1,8 @@
 package com.nelldora.mall.file.save;
 
-import com.nelldora.mall.file.domain.UploadFile;
 import com.nelldora.mall.file.vo.TransFile;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Component
 public class FileSave {
 
     // 파일명 변환 할 때 필요한 순서
@@ -17,7 +19,8 @@ public class FileSave {
     //2. 서버 저장용 파일명 부여하기
     //3. 경로에 저장하기
     //
-    String fileDir;
+    @Value("${file.dir}")
+    private String fileDir;
 
     public String getFullPath(String fileName){
         return fileDir+fileName;
