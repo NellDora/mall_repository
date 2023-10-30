@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -29,12 +30,19 @@ public class JpaFileRepository implements FileRepository{
     }
 
     @Override
-    public ItemImage findByItemIdFirst(Item inputItem) {
+    public ItemImage findByItemIdFirst(Long itemId) {
         QItemImage itemImage = QItemImage.itemImage;
         QItem item = QItem.item;
         return query.select(itemImage).from(itemImage).join(itemImage.item, item)
-                .on(item.id.eq(inputItem.getId())).fetchFirst();
+                .on(item.id.eq(itemId)).fetchFirst();
 
     }
 
+    @Override
+    public List<ItemImage> findByItemIdAll(Long itemId) {
+        QItemImage itemImage = QItemImage.itemImage;
+        QItem item = QItem.item;
+        return query.select(itemImage).from(itemImage).join(itemImage.item, item)
+                .on(item.id.eq(itemId)).fetch();
+    }
 }

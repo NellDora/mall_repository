@@ -6,6 +6,8 @@ import com.nelldora.mall.item.domain.Item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class FileService {
@@ -16,7 +18,13 @@ public class FileService {
         fileRepository.save(itemImage);
     }
 
-    public ItemImage findByItemIdFirst(Item item){
-        return fileRepository.findByItemIdFirst(item);
+    public ItemImage findByItemIdFirst(Long itemId){
+        return fileRepository.findByItemIdFirst(itemId);
+    }
+
+
+    //
+    public List<ItemImage> findByItemIdAll(Long itemId){
+        return fileRepository.findByItemIdAll(itemId);
     }
 }

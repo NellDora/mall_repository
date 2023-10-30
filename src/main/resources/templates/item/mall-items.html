@@ -39,19 +39,15 @@
                     <div class="card" style="width: 18rem;">
                         <div th:each="itemImage : ${itemImageDTOs}">
                             <div th:if="${item.getId.equals(itemImage.itemId)}">
-                            호우호우
-                            호우호우
-                            <img th:src="|/img/item_img/${itemImage.serverFileName}|" class="card-img-top" alt="...">
-                            호우호우
+                            <img th:src="|/img/item_img/${itemImage.serverFileName}|" class="card-img-top" alt="등록된 이미지가 없습니다." style="width:18rem; height:12rem;">
                             </div>
                         </div>
 
                         <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <h5 class="card-title" th:text="${item.name}">Card title</h5>
+                            <p class="card-text" th:text="${item.description}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         </div>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item" th:text="${item.name}">닭고기 통조림</li>
                             <li class="list-group-item" th:text="${item.price}"></li>
                         </ul>
                         <div class="card-body">

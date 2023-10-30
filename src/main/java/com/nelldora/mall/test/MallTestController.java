@@ -23,4 +23,9 @@ public class MallTestController {
         return "/mall-main";
     }
 
+    @GetMapping("/pay")
+    public String pay(){
+        return "/test/mall-pay";
+    }
+
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
@@ -33,8 +34,8 @@ public class ItemController {
         for(Item item : items){
             ItemDTO itemDTO = new ItemDTO(item);
             itemDTOS.add(itemDTO);
-            if(fileService.findByItemIdFirst(item)!=null){
-                ItemImage itemImage = fileService.findByItemIdFirst(item);
+            if(fileService.findByItemIdFirst(item.getId())!=null){
+                ItemImage itemImage = fileService.findByItemIdFirst(item.getId());
                 ItemImageDTO itemImageDTO = new ItemImageDTO(itemImage);
                 itemImageDTOS.add(itemImageDTO);
             }
@@ -47,6 +48,15 @@ public class ItemController {
 
 
         return "/item/mall-items";
+    }
+
+    @GetMapping("/item/{itemId}")
+    public String itemDetail(@PathVariable ("itemId") Long id, Model model){
+        Item item = itemService.findById(id);
+        model.addAttribute("item",item);
+        //model.addAttribute("itemImage",);
+
+        return null;
     }
 
 }
