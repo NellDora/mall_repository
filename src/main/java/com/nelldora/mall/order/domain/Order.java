@@ -10,12 +10,13 @@ import org.springframework.data.util.Lazy;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
 @Slf4j
-public class Order {
+public class Order { //사실상 Payment (결제)
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +38,7 @@ public class Order {
     @JoinColumn(name="delivery_id")
     private Delivery delivery; //배송지
 
-    private Date regDate; //등록날짜
+    private LocalDateTime regDate; //등록날짜
 
     private Date payDate; // 결제 예정 날자
 
@@ -45,14 +46,11 @@ public class Order {
     }
 
     //주문생성
-    public static Order createOrder(User user,Delivery delivery, Date regDate, OrderItem ... orderItems){
+    public static Order createOrder(User user,Delivery delivery){
         Order order = new Order();
         order.user = user;
         order.delivery = delivery;
-
-        for(OrderItem orderItem : orderItems) {
-            order.orderItems.add(orderItem);
-        }
+        order.regDate = LocalDateTime.now();
         return order;
     }
     
@@ -68,27 +66,6 @@ public class Order {
         return orderItems;
     }
 
-    //배송지 변경하기 -> 주문 상태에 따라 주소 변경이 가능한지 안한지 상세 분류 필요
-    public Delivery changeAddress(Delivery reDelivery) throws AlreadyDeliveryException {
-
-        // 이미 배송 출발하거나 배달 완료 되었을 경우
-        if(delivery.getDeliveryState().equals(DeliveryState.START)||delivery.getDeliveryState().equals(DeliveryState.ARRIVAL)){
-            throw new AlreadyDeliveryException("배송이 출발했거나 배송이 완료되었습니다.");
-        }else{
-            delivery =reDelivery;
-        }
-        //배송확인을 위한 수정 배송정보 출력
-        return delivery;
-    }
-
-    //주문 취소하기
-    public void cancel() throws InvalidateCancelException {
-
-        //이미 배송 출발했거나 배달 완료 되었을 경우 취소 불가능
-        if(delivery.getDeliveryState().equals(DeliveryState.START)||delivery.getDeliveryState().equals(DeliveryState.ARRIVAL)){
-            throw new InvalidateCancelException("배송이 출발했거나 배송이 완료되어 주문 취소가 불가합니다");
-        }
-    }
 
 
 
