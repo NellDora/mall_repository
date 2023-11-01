@@ -31,6 +31,6 @@ public class MallTestController {
 
     @GetMapping("/pay2")
     public String pay2(){
-        return "/test/realPayTest";
+        return "/test/mall-pay3";
     }
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CartRepository {
 
-    void save(Cart cart);
+    Cart save(Cart cart);
 
     void update(Long id, Cart updateCart);
 

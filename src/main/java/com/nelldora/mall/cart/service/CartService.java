@@ -24,9 +24,15 @@ public class CartService {
     //장바구니 추가
     @Transactional
     public void addCart(User user , Long itemId,int count){
-
+        Cart findUserCart= null;
         //유저 카트 조회 시작
-        Cart findUserCart =  cartRepository.findByUserId(user.getId());
+        if(cartRepository.findByUserId(user.getId())!=null){
+            findUserCart =  cartRepository.findByUserId(user.getId());
+        }else{
+            Cart newCart =Cart.createOrder(user);
+            findUserCart = cartRepository.save(newCart);
+        }
+
 
         //아이템 조회
         Item findItem = itemRepository.findById(itemId);

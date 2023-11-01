@@ -22,8 +22,9 @@ public class JpaCartRepository implements CartRepository{
     }
 
     @Override
-    public void save(Cart cart) {
+    public Cart save(Cart cart) {
         em.persist(cart);
+        return cart;
     }
 
     @Override

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+  $.ajax({
+            type:"POST",
+            url:"/KSBoardReply/save",
+            data:{ "content":content , "ksboardId" : ksboardId},
+            success:function(){
+            //getReplyList();
+            },
+            error:function(){
+            console.log('등록실패');
+            }
+            });// ajax End point
+</script>
+</body>
+</html>

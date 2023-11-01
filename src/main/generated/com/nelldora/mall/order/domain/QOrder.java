@@ -32,7 +32,7 @@ public class QOrder extends EntityPathBase<Order> {
 
     public final DatePath<java.sql.Date> payDate = createDate("payDate", java.sql.Date.class);
 
-    public final DatePath<java.sql.Date> regDate = createDate("regDate", java.sql.Date.class);
+    public final DateTimePath<java.time.LocalDateTime> regDate = createDateTime("regDate", java.time.LocalDateTime.class);
 
     public final com.nelldora.mall.user.domain.QUser user;
 

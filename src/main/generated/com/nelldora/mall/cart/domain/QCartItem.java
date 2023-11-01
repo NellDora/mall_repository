@@ -24,11 +24,11 @@ public class QCartItem extends EntityPathBase<CartItem> {
 
     public final QCart cart;
 
-    public final NumberPath<Integer> count = createNumber("count", Integer.class);
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final com.nelldora.mall.item.domain.QItem item;
+
+    public final NumberPath<Integer> quantity = createNumber("quantity", Integer.class);
 
     public final NumberPath<Integer> totalPrice = createNumber("totalPrice", Integer.class);
 

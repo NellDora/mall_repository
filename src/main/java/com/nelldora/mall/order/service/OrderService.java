@@ -7,7 +7,6 @@ import com.nelldora.mall.order.domain.Order;
 import com.nelldora.mall.order.domain.OrderItem;
 import com.nelldora.mall.order.exception.StockLackException;
 import com.nelldora.mall.order.repository.OrderItemRepository;
-import com.nelldora.mall.order.repository.OrderRepository;
 import com.nelldora.mall.order.vo.OrderCheckState;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class OrderItemService {
+public class OrderService {
 
     private final OrderItemRepository orderItemRepository;
     private final ItemRepository itemRepository;
