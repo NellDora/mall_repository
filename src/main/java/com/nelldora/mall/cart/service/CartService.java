@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CartService {
@@ -48,6 +50,14 @@ public class CartService {
 
 
         //---------------장바구니에 넣기 끝------------
+    }
+
+    public List<CartItem> findByCartIdForCartItemList(Long id){
+        return cartItemRepository.findByCartId(id);
+    }
+
+    public Cart findByUserId (String id){
+        return cartRepository.findByUserId(id);
     }
 
 }

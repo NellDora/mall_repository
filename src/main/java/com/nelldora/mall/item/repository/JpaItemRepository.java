@@ -81,4 +81,16 @@ public class JpaItemRepository implements ItemRepository{
         }
         return null;
     }
+
+    public Item subtractStock(Long id, int quantity){
+        Item findItem = em.find(Item.class, id);
+        findItem.subtractStock(quantity);
+        return findItem;
+    }
+
+    public Item addStock(Long id, int quantity){
+        Item findItem = em.find(Item.class, id);
+        findItem.addStock(quantity);
+        return findItem;
+    }
 }

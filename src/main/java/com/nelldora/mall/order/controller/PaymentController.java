@@ -19,8 +19,14 @@ public class PaymentController {
         //정보가 넘어오는지 확인해야함
 
         //log.info("넘겨받은 결제 정보 : ={}", payment);
-        log.info("넘겨받은 결제 정보 : ={}", payment.getImp_uid());
-        log.info("넘겨받은 결제자 이름 : = {}", payment.getMerchant_uid());
+        log.info("넘겨받은 가맹점 번호 : {}", payment.getImp_uid());
+        log.info("넘겨받은 구매 번호 :  {}", payment.getMerchant_uid());
+        log.info("넘겨받은 결제 금액 : {}", payment.getPaid_amount());
+        log.info("넘겨받은 결제 상테 : {}", payment.getStatus());
+        log.info("넘겨받은 결제자 명 : {}", payment.getName());
+        log.info("넘겨받은 결제 방식 : {}", payment.getPaid_method());
+        log.info("넘겨받은 결제 성공여부 : {}", payment.isSuccess());
+        
 
 
         return new ResponseEntity<>(HttpStatus.OK);

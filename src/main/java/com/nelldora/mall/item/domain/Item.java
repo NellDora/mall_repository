@@ -58,4 +58,14 @@ public class Item {
         return code;
     }
 
+    public Item addStock(int quantity){
+        this.stock  += quantity;
+        return this;
+    }
+
+    public Item subtractStock(int quantity){
+        this.stock -= quantity;
+        return this;
+    }
+
 }

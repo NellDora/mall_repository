@@ -32,7 +32,7 @@ class JpaItemCategoryRepositoryTest {
     @Test
     void Test2(){
 
-        itemCategoryRepository.save(ItemCategory.createItemCategory(3000L,"fox"));
+        itemCategoryRepository.save(ItemCategory.createItemCategory(4000L,"bear"));
     }
 
 }

@@ -78,4 +78,12 @@ public class ItemService {
         }
     }
 
+
+    public Item subtractStock(Long id, int quantity){
+        return itemRepository.subtractStock(id,quantity);
+    }
+
+    public Item addStock(Long id, int quantity){
+        return itemRepository.addStock(id,quantity);
+    }
 }

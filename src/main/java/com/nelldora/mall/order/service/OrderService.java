@@ -3,16 +3,21 @@ package com.nelldora.mall.order.service;
 import com.nelldora.mall.cart.domain.CartItem;
 import com.nelldora.mall.item.domain.Item;
 import com.nelldora.mall.item.repository.ItemRepository;
+import com.nelldora.mall.order.domain.Delivery;
 import com.nelldora.mall.order.domain.Order;
 import com.nelldora.mall.order.domain.OrderItem;
 import com.nelldora.mall.order.exception.StockLackException;
 import com.nelldora.mall.order.repository.OrderItemRepository;
+import com.nelldora.mall.order.repository.OrderRepository;
 import com.nelldora.mall.order.vo.OrderCheckState;
+import com.nelldora.mall.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -21,7 +26,32 @@ import java.util.List;
 public class OrderService {
 
     private final OrderItemRepository orderItemRepository;
+    private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
+
+    public OrderCheckState saveOrder(User user, List<CartItem> cartItems , Delivery delivery){
+        //OrderCheckState => 주문 생성이 성공했는지 안했는지 확인을 하기 위한 리턴값
+        OrderCheckState orderCheckState = OrderCheckState.STANDBY;
+        try {
+
+            Long merchantIdNum = createOrderId();
+
+            //주문 객체 생성
+            Order newOrder = Order.createOrder(merchantIdNum,user, delivery);
+            //주문 결제 DB에 저장 완료
+            orderRepository.save(newOrder);
+
+            //주문 상세 아이템 일괄 셍성
+            saveOrderItems(newOrder,cartItems);
+
+            orderCheckState = OrderCheckState.PASS;
+        } catch (StockLackException e) {
+            orderCheckState = OrderCheckState.LOQ;
+        }
+
+
+        return orderCheckState;
+    }
 
     //단일 주문 생성용
     public OrderItem saveOrderItem(Order order, CartItem cartItem){
@@ -32,24 +62,31 @@ public class OrderService {
     }
     //장바구니에 있던 것들 전체 주문 상세 생성
     @Transactional
-    public OrderCheckState saveOrderItems(Order order, List<CartItem> cartItems){
+    public void saveOrderItems(Order order, List<CartItem> cartItems) throws StockLackException {
+        //주문체크 상태 인스턴스 생성
 
-        OrderCheckState checkState = OrderCheckState.STANDBY;
-
-        try {
+            //카트 물품 전체 수량 체크
             for(CartItem cartItem: cartItems){
                 checkStock(cartItem);
             }
+            //수량 체크 문제 없을 시 모든 구매할 물품 ( 장바구니)를 주문으로 변경
             for(CartItem cartItem : cartItems){
+                //저장할 orderItem 객체 새로 생성
                 OrderItem newOrderItem = OrderItem.createOrderItem(order,cartItem);
+
+                //구매할 상품의 판매 수량 수정
+                Item saleItem = cartItem.getItem();
+                itemRepository.subtractStock(saleItem.getId(), cartItem.getQuantity());
+                log.info("수량 변경 완료");
+
+                //상세 주문 저장 완료
                 orderItemRepository.save(newOrderItem);
 
+                //그리고 판매수량을 전체 구매 수량만큼 감소시켜야함
                 log.info("OrderItemService : 저장 되었사옵니다");
+
             }
-            } catch (StockLackException e) {
-                throw new RuntimeException(e);
-            }
-        return checkState;
+
 
     }
 
@@ -64,4 +101,42 @@ public class OrderService {
         }
     }
 
+    //구매 수량보다 부족한 재고의 아이템을 모두 반환하는 메서드
+    public List<CartItem> returnListLackStockItem(List<CartItem> cartItems){
+        List<CartItem> lackCartItem = null;
+
+        for(CartItem cartItem : cartItems){
+            if(cartItem.getQuantity()<cartItem.getItem().getStock()){
+                lackCartItem.add(cartItem);
+            }
+
+        }
+        return lackCartItem;
+
+    }
+
+    //주무번호 생성   20231102/000001
+    public Long createOrderId(){
+
+        Long orderNumber=0L;
+
+        //생성할 날짜
+        LocalDate localDate = LocalDate.now();
+
+        //포메팅 변환용 포메터 선언
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+        //데이터 입력
+        String todayDate = localDate.format(formatter);
+
+        if(orderRepository.findByIdDate(Long.parseLong(todayDate))==null){
+            todayDate+="000001";
+            orderNumber=Long.parseLong(todayDate);
+        }else{
+            List<Order> findOrders = orderRepository.findByIdDate(Long.parseLong(todayDate));
+            orderNumber =findOrders.get(findOrders.size()-1).getId()+1;
+        };
+
+        return orderNumber;
+    }
 }

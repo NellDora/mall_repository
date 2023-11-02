@@ -32,7 +32,7 @@ public class JpaUserRepository implements UserRepository{
     }
 
     @Override
-    public User findByNum(int id) {
+    public User findByNum(Long id) {
         User findUser = em.find(User.class,id);
         log.info("UserRepository : 조회 완료");
         return findUser;

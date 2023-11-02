@@ -3,6 +3,8 @@ package com.nelldora.mall.order.repository;
 import com.nelldora.mall.order.domain.Order;
 import com.nelldora.mall.user.domain.User;
 
+import java.util.List;
+
 public interface OrderRepository {
 
     void save(Order order);
@@ -13,6 +15,7 @@ public interface OrderRepository {
     //String createOrder(User user, ){
 
     //}
+    List<Order> findByIdDate(Long date);
 
 
 }

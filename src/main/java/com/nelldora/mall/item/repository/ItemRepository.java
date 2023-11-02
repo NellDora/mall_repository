@@ -20,4 +20,7 @@ public interface ItemRepository {
     List<Item> findByCategory (ItemCategory itemCategory);
 
     List<Item> findByNameAndCategory(String name , ItemCategory itemCategory);
+
+    Item subtractStock(Long id, int quantity);
+    Item addStock(Long id, int quantity);
 }

@@ -6,12 +6,14 @@ import com.nelldora.mall.cart.service.CartService;
 import com.nelldora.mall.item.domain.Item;
 import com.nelldora.mall.item.repository.ItemRepository;
 import com.nelldora.mall.user.domain.User;
+import com.nelldora.mall.user.dto.UserDTO;
 import com.nelldora.mall.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -70,5 +72,20 @@ class JpaCartRepositoryTest {
         List<User> findUser = userRepository.findById("test");
         findUser.get(0);
         cartService.addCart(findUser.get(0), 8L, 2);
+    }
+
+    @Test
+    void Test4(){
+        List<User> findUser = userRepository.findById("test");
+        findUser.get(0);
+        cartService.addCart(findUser.get(0), 7L, 5);
+    }
+
+    @Transactional
+    @Test
+    void Test5(){
+        Cart findCart = cartRepository.findByUserId("test");
+        UserDTO user = new UserDTO(findCart.getUser());
+        log.info("찾은 카트의 정보 {}, {}, {}", findCart.getId(),findCart.getUser().getId() ,findCart.getTotalPrice());
     }
 }

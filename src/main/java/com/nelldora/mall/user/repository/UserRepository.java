@@ -8,7 +8,7 @@ public interface UserRepository {
 
     void save(User user);
 
-    User findByNum(int num);
+    User findByNum(Long num);
 
     List<User> findById(String id);
 }

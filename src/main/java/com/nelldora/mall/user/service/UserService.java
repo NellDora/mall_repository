@@ -9,6 +9,7 @@ import com.nelldora.mall.user.vo.JoinResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -67,6 +68,17 @@ public class UserService {
         }else{
             throw new PasswordCheckFailException("비밀번호가 맞지 않습니다.");
         }
+    }
+
+    @Transactional
+    public List<User> findById(String id){
+         List<User> users = new ArrayList<>();
+         return userRepository.findById(id);
+    }
+
+    @Transactional
+    public User findByNum(Long id){
+        return userRepository.findByNum(id);
     }
 
 }

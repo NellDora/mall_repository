@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 @Slf4j
@@ -22,6 +24,7 @@ public class JpaOrderRepository implements OrderRepository{
 
     @Override
     public void save(Order order) {
+        log.info("OrderRepository : Order 생성 완료");
         em.persist(order);
     }
 
@@ -29,4 +32,24 @@ public class JpaOrderRepository implements OrderRepository{
     public Order findById(Long id) {
         return null;
     }
+
+    @Override
+    public List<Order> findByIdDate(Long date) {
+        List orderList = new ArrayList<>();
+                orderList = em.createQuery("select t from Order t where t.id like concat(:idDate ,'%')")
+                .setParameter("idDate", date)
+                .getResultList();
+
+        return orderList;
+    }
+
+    public List<Order> findByIdDateV2(String date) {
+        List orderList = new ArrayList<>();
+        orderList = em.createQuery("select t from Order t where t.id like concat(:idDate ,'%')")
+                .setParameter("idDate", date)
+                .getResultList();
+
+        return orderList;
+    }
+
 }

@@ -3,10 +3,12 @@ package com.nelldora.mall.order.domain;
 import com.nelldora.mall.cart.domain.CartItem;
 import com.nelldora.mall.item.domain.Item;
 import com.nelldora.mall.order.vo.OrderState;
+import lombok.Getter;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 @Table(name = "order_item")
 public class OrderItem {
 
