@@ -34,6 +34,8 @@ public class QOrder extends EntityPathBase<Order> {
 
     public final DateTimePath<java.time.LocalDateTime> regDate = createDateTime("regDate", java.time.LocalDateTime.class);
 
+    public final NumberPath<Long> totalPrice = createNumber("totalPrice", Long.class);
+
     public final com.nelldora.mall.user.domain.QUser user;
 
     public QOrder(String variable) {

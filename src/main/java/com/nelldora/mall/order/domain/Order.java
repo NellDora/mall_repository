@@ -48,6 +48,9 @@ public class Order { //사실상 Payment (결제)
     @Column(name = "pay_Date")
     private Date payDate; // 결제 예정 날자
 
+    @Column(name = "total_price")
+    private Long totalPrice;
+
     protected Order() {
     }
 
@@ -58,6 +61,7 @@ public class Order { //사실상 Payment (결제)
         order.user = user;
         order.delivery = delivery;
         order.regDate = LocalDateTime.now();
+        order.totalPrice =0L;
         return order;
     }
     
@@ -78,7 +82,20 @@ public class Order { //사실상 Payment (결제)
         return this;
     }
 
+    public Order revisionTotalPrice(List<OrderItem> orderItems){
+
+        for(OrderItem orderItem : orderItems){
+            this.totalPrice += orderItem.getOrderPrice();
+        }
+        return this;
+    }
 
 
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
 
+    public void totalPriceUpdate(Long price){
+        this.totalPrice = price;
+    }
 }

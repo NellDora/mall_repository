@@ -52,16 +52,20 @@ class JpaCartRepositoryTest {
     @Test
     void Test2(){
 
+        User findUser = userRepository.findById("test").get(0);
         Cart findCart = cartRepository.findByUserId("test");
-        Item findItem1 = itemRepository.findById(9L);
-        Item findItem2 = itemRepository.findById(9L);
+        Item findItem1 = itemRepository.findById(6L);
+        Item findItem2 = itemRepository.findById(7L);
+        Item findItem3 = itemRepository.findById(8L);
 
         log.info("test 유저의 장바구니 코드 = {} ", findCart.getId());
         log.info("찾은 상품의 ID 값 = {}, 이름 = {} , 가격 = {} ", findItem1.getId(), findItem1.getName(), findItem1.getPrice());
         log.info("찾은 상품의 ID 값 = {}, 이름 = {} , 가격 = {} ", findItem2.getId(), findItem2.getName(), findItem2.getPrice());
 
-        CartItem cartItem1 = CartItem.createCartItem(findItem1, findCart , 10 );
-        CartItem cartItem2 = CartItem.createCartItem(findItem2, findCart , 10 );
+        CartItem cartItem1 = CartItem.createCartItem(findItem1, findCart , 4 );
+        CartItem cartItem2 = CartItem.createCartItem(findItem2, findCart , 6 );
+        CartItem cartItem3 = CartItem.createCartItem(findItem3, findCart , 8 );
+
 
         //findCart.addCartItems(cartItem1, cartItem2);
 
@@ -71,14 +75,25 @@ class JpaCartRepositoryTest {
     void Test3(){
         List<User> findUser = userRepository.findById("test");
         findUser.get(0);
-        cartService.addCart(findUser.get(0), 8L, 2);
+        cartService.addCart(findUser.get(0), 6L, 4);
+        cartService.addCart(findUser.get(0), 7L, 6);
+        cartService.addCart(findUser.get(0), 8L, 8);
+    }
+
+    @Test
+    void Test32(){
+        List<User> findUser = userRepository.findById("test2");
+        findUser.get(0);
+        cartService.addCart(findUser.get(0), 10L, 4);
+        cartService.addCart(findUser.get(0), 11L, 4);
+        cartService.addCart(findUser.get(0), 12L, 4);
     }
 
     @Test
     void Test4(){
         List<User> findUser = userRepository.findById("test");
         findUser.get(0);
-        cartService.addCart(findUser.get(0), 7L, 5);
+        cartService.addCart(findUser.get(0), 6L, 5);
     }
 
     @Transactional
@@ -87,5 +102,12 @@ class JpaCartRepositoryTest {
         Cart findCart = cartRepository.findByUserId("test");
         UserDTO user = new UserDTO(findCart.getUser());
         log.info("찾은 카트의 정보 {}, {}, {}", findCart.getId(),findCart.getUser().getId() ,findCart.getTotalPrice());
+    }
+
+    @Test
+    void Test6(){
+        List<User> findUser = userRepository.findById("test2");
+        findUser.get(0);
+        cartService.addCart(findUser.get(0), 7L, 5);
     }
 }

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+    <!-- 카카오페이 js -->
+    <script>
+        var IMP = window.IMP;
+        IMP.init("");
+
+
+        function requestPay() {
+            IMP.request_pay({
+            pg: "kakaopay",
+            pay_method: "kakaopay",
+            merchant_uid: "550",   // 주문번호
+            name: "드락사르",
+            amount: 500,                         // 숫자 타입
+            buyer_email: "sm302010@naver.com",
+            buyer_name: "드락사르",
+            buyer_tel: "000-0000-0000",
+            buyer_addr: "테스트 입니다.",
+            buyer_postcode: ""
+            }, function (rsp) {
+            if (rsp.success) {
+            // ajax로 HTTP 요청
+            $.ajax({
+                type:"POST",
+                url:"/payment",
+                contentType: "application/json; charset=utf-8",
+                data:JSON.stringify({
+                "imp_uid": rsp.imp_uid,
+                "merchant_uid" :rsp.merchant_uid,
+                "paid_amount" :rsp.paid_amount,
+                "status" :rsp.status,
+                "name":rsp.name,
+                "paid_method":rsp.paid_method,
+                "success" :rsp.success
+                }),
+                success:function(data){
+                console.log('결제 성공인가 봅니다');
+                alert(`결제 성공했음`);
+                } //success 종료
+            })//ajax 종료
+        } else{
+        alert(`결제에 실패하였습니다. 에러 내용: ${rsp.error_msg}`);
+        } //else 종료
+        });//
+    }
+    </script>
+
+    <style>
+      .main-container{
+        min-height: 800px;
+        background-color: antiquewhite;
+      }
+      .mid-container{
+        width: 70%;
+      }
+
+      /* Chrome, Safari, Edge, Opera */
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+      }
+
+    /* Firefox  */
+      input[type='number'] {
+     -moz-appearance: textfield;
+    }
+    </style>
+  </head>
+<body>
+    <!-- 탑 컨테이너 넣는 곳  시작 -->
+    <div th:replace="~{/fragment/top-container :: top-container}"></div>
+
+    <!-- 탑 컨테이너 넣는 곳  끝 -->
+
+    <div class="main-container"> <!-- --------------------메인 컨테이너 시작---------------   -->
+      <div class="mid-container" style="margin-top: 7%; margin-left: 30%; float: left; width:40%;">
+
+      </div> <!-- ----------------------메인 미드 컨테이너--------------------- 끝-->
+
+
+
+        <button onclick="requestPay()">결제하기</button>
+    </div> <!-- 메인 컨테이너 끝-->
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
+

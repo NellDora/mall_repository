@@ -17,5 +17,7 @@ public interface OrderRepository {
     //}
     List<Order> findByIdDate(Long date);
 
+    void updatePrice(Long id,Long price );
+
 
 }

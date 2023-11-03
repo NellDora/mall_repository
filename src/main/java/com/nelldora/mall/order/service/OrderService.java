@@ -13,16 +13,19 @@ import com.nelldora.mall.order.vo.OrderCheckState;
 import com.nelldora.mall.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class OrderService {
 
     private final OrderItemRepository orderItemRepository;
@@ -42,8 +45,10 @@ public class OrderService {
             orderRepository.save(newOrder);
 
             //주문 상세 아이템 일괄 셍성
-            saveOrderItems(newOrder,cartItems);
-
+            List<OrderItem> newOrderItems= saveOrderItems(newOrder,cartItems);
+            //revisionTotalPrice(newOrder.getId(),newOrderItems);\
+            calTotalPrice(newOrder.getId(), newOrderItems);
+            log.info("상세보기 일괄 생성");
             orderCheckState = OrderCheckState.PASS;
         } catch (StockLackException e) {
             orderCheckState = OrderCheckState.LOQ;
@@ -61,10 +66,11 @@ public class OrderService {
         return newOrderItem;
     }
     //장바구니에 있던 것들 전체 주문 상세 생성
-    @Transactional
-    public void saveOrderItems(Order order, List<CartItem> cartItems) throws StockLackException {
+ 
+    public List<OrderItem> saveOrderItems(Order order, List<CartItem> cartItems) throws StockLackException {
         //주문체크 상태 인스턴스 생성
-
+            log.info("상세 주문 동작 시작");
+            List<OrderItem> orderItems = new ArrayList<>();
             //카트 물품 전체 수량 체크
             for(CartItem cartItem: cartItems){
                 checkStock(cartItem);
@@ -73,7 +79,7 @@ public class OrderService {
             for(CartItem cartItem : cartItems){
                 //저장할 orderItem 객체 새로 생성
                 OrderItem newOrderItem = OrderItem.createOrderItem(order,cartItem);
-
+                orderItems.add(newOrderItem);
                 //구매할 상품의 판매 수량 수정
                 Item saleItem = cartItem.getItem();
                 itemRepository.subtractStock(saleItem.getId(), cartItem.getQuantity());
@@ -86,15 +92,17 @@ public class OrderService {
                 log.info("OrderItemService : 저장 되었사옵니다");
 
             }
-
+            return orderItems;
 
     }
 
     //주문 수량과 판매물품 나은 재고 검증 로직
     public void checkStock(CartItem cartItem) throws StockLackException {
-
-        Item findItem = itemRepository.findById(cartItem.getItem().getId());
-        if(cartItem.getQuantity()> findItem.getStock()){
+        log.info("재고확인 시작");
+        Item findItem = cartItem.getItem();
+        log.info(" {} {} {}", findItem.getId(), findItem.getName() , findItem.getStock());
+        //Item findItem = itemRepository.findById(cartItem.getItem().getId());
+        if(cartItem.getQuantity()< findItem.getStock()){
             log.info("OrderItemService : 주문 수량 , 재고 확인 완료 ( 문제 없음 ");
         }else{
             throw new StockLackException("물품의 수량이 구매하시는 수량보다 부족합니다.");
@@ -103,10 +111,11 @@ public class OrderService {
 
     //구매 수량보다 부족한 재고의 아이템을 모두 반환하는 메서드
     public List<CartItem> returnListLackStockItem(List<CartItem> cartItems){
-        List<CartItem> lackCartItem = null;
-
+        List<CartItem> lackCartItem = new ArrayList<>();
+        log.info("재고 부족 물품 반환 시작");
         for(CartItem cartItem : cartItems){
-            if(cartItem.getQuantity()<cartItem.getItem().getStock()){
+            Item findItem = cartItem.getItem();
+            if(cartItem.getQuantity()>findItem.getStock()){
                 lackCartItem.add(cartItem);
             }
 
@@ -129,14 +138,28 @@ public class OrderService {
         //데이터 입력
         String todayDate = localDate.format(formatter);
 
-        if(orderRepository.findByIdDate(Long.parseLong(todayDate))==null){
+        if(orderRepository.findByIdDate(Long.parseLong(todayDate)).isEmpty()){
             todayDate+="000001";
             orderNumber=Long.parseLong(todayDate);
         }else{
             List<Order> findOrders = orderRepository.findByIdDate(Long.parseLong(todayDate));
-            orderNumber =findOrders.get(findOrders.size()-1).getId()+1;
+            orderNumber = findOrders.get(0).getId()+1;
         };
 
         return orderNumber;
+    }
+
+    @Transactional
+    public void totalPriceUpdateForOrder(Long id , Long price){
+
+    }
+
+    private Long calTotalPrice(Long id,List<OrderItem> orderItems){
+        Long totalPrice = 0L;
+        for(OrderItem orderItem : orderItems){
+            totalPrice += orderItem.getOrderPrice();
+        }
+        orderRepository.updatePrice(id,totalPrice);
+        return totalPrice;
     }
 }

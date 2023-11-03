@@ -7,6 +7,7 @@ import com.nelldora.mall.cart.service.CartService;
 import com.nelldora.mall.item.domain.Item;
 import com.nelldora.mall.item.repository.ItemRepository;
 import com.nelldora.mall.order.service.OrderService;
+import com.nelldora.mall.order.vo.OrderCheckState;
 import com.nelldora.mall.session.SESSION_CON;
 import com.nelldora.mall.user.domain.User;
 import com.nelldora.mall.user.dto.UserDTO;
@@ -17,7 +18,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,18 +99,37 @@ public class MallTestController {
         return "/test/merchantTest";
     }
 
-    @GetMapping
-    public String pay(@SessionAttribute(SESSION_CON.LOGIN_USER) User user){
+    @GetMapping("/500")
+    public String pay5(@SessionAttribute(SESSION_CON.LOGIN_USER) User user, HttpServletResponse response) throws IOException {
+        OrderCheckState orderCheckState = OrderCheckState.STANDBY;
+        response.setContentType("text/html; charset=utf-8");
         User findUser = userService.findById(user.getId()).get(0);
         Cart findCart = cartService.findByUserId(findUser.getId());
-        List<CartItem> cartItems = cartService.findByCartIdForCartItemList(findCart.getId())
-        orderService.saveOrder(findUser,cartItems,null  );
+        List<CartItem> cartItems = cartService.findByCartIdForCartItemList(findCart.getId());
+        orderCheckState = orderService.saveOrder(findUser,cartItems,null  );
 
-        return "redirect:/500";
+        if(orderCheckState == OrderCheckState.LOQ){
+            PrintWriter advise =  response.getWriter();
+            List<CartItem> stockItem = orderService.returnListLackStockItem(cartItems);
+
+            String message ="수량이 부족한 물품이 있습니다. 확인 부탁드립니다. [재고 부족 물품 나열]";
+            String list = "";
+
+            for(CartItem cartItem : stockItem){
+                list += cartItem.getItem().getName()+" ";
+            }
+            advise.write("<script>alert('"+message+"');</script>");
+            advise.write("<script>alert('"+list+"');</script>");
+            advise.write("<script>history.back();</script>");
+            advise.flush();
+
+        }
+
+        return "redirect:/test/600";
     }
 
-    @GetMapping
+    @GetMapping("/600")
     public String payview(){
-        return "";
+        return "mall-test-pay";
     }
 }
