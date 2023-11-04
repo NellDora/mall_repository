@@ -39,6 +39,11 @@ public class OrderService {
 
             Long merchantIdNum = createOrderId();
 
+            for(CartItem cartItem: cartItems){
+                checkStock(cartItem);
+            }
+
+            
             //주문 객체 생성
             Order newOrder = Order.createOrder(merchantIdNum,user, delivery);
             //주문 결제 DB에 저장 완료
@@ -71,10 +76,9 @@ public class OrderService {
         //주문체크 상태 인스턴스 생성
             log.info("상세 주문 동작 시작");
             List<OrderItem> orderItems = new ArrayList<>();
-            //카트 물품 전체 수량 체크
-            for(CartItem cartItem: cartItems){
-                checkStock(cartItem);
-            }
+
+            //수량체크는 saveOrder 상층부로 이동
+            
             //수량 체크 문제 없을 시 모든 구매할 물품 ( 장바구니)를 주문으로 변경
             for(CartItem cartItem : cartItems){
                 //저장할 orderItem 객체 새로 생성

@@ -65,7 +65,7 @@ public class MallTestController {
 
     @PostMapping("/300")
     public String loginAction(@ModelAttribute("user") UserDTO userDTO, HttpServletRequest request){
-        User findUser = userService.findById(userDTO.getId()).get(0);
+        User findUser = userService.findById(userDTO.getId());
 
         if(findUser.getPassword().equals(userDTO.getPasswordOne())){
 
@@ -103,7 +103,7 @@ public class MallTestController {
     public String pay5(@SessionAttribute(SESSION_CON.LOGIN_USER) User user, HttpServletResponse response) throws IOException {
         OrderCheckState orderCheckState = OrderCheckState.STANDBY;
         response.setContentType("text/html; charset=utf-8");
-        User findUser = userService.findById(user.getId()).get(0);
+        User findUser = userService.findById(user.getId());
         Cart findCart = cartService.findByUserId(findUser.getId());
         List<CartItem> cartItems = cartService.findByCartIdForCartItemList(findCart.getId());
         orderCheckState = orderService.saveOrder(findUser,cartItems,null  );

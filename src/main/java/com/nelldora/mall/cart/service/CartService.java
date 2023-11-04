@@ -7,6 +7,7 @@ import com.nelldora.mall.cart.repository.CartRepository;
 import com.nelldora.mall.item.domain.Item;
 import com.nelldora.mall.item.repository.ItemRepository;
 import com.nelldora.mall.user.domain.User;
+import com.nelldora.mall.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,8 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final ItemRepository itemRepository;
 
+    private final UserRepository userRepository;
+
 
 
     //장바구니 추가
@@ -28,8 +31,8 @@ public class CartService {
     public void addCart(User user , Long itemId,int count){
         Cart findUserCart= null;
         //유저 카트 조회 시작
-        if(cartRepository.findByUserId(user.getId())!=null){
-            findUserCart =  cartRepository.findByUserId(user.getId());
+        if(cartRepository.findByUserNumber(user.getUserNumber())!=null){
+            findUserCart =  cartRepository.findByUserNumber(user.getUserNumber());
         }else{
             Cart newCart =Cart.createOrder(user);
             findUserCart = cartRepository.save(newCart);
@@ -56,8 +59,15 @@ public class CartService {
         return cartItemRepository.findByCartId(id);
     }
 
-    public Cart findByUserId (String id){
-        return cartRepository.findByUserId(id);
+    public Cart findByUserNumber (Long number){
+        return cartRepository.findByUserNumber(number);
     }
+
+    public Cart findByUserId (String id){
+        User findUser = userRepository.findById(id);
+
+        return cartRepository.findByUserNumber(findUser.getUserNumber());
+    };
+
 
 }

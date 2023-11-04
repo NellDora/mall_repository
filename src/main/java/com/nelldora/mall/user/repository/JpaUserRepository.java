@@ -1,5 +1,6 @@
 package com.nelldora.mall.user.repository;
 
+import com.nelldora.mall.user.domain.QUser;
 import com.nelldora.mall.user.domain.User;
 import com.querydsl.core.QueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,7 +17,7 @@ import java.util.List;
 public class JpaUserRepository implements UserRepository{
 
     private final EntityManager em;
-    private final QueryFactory query;
+    private final JPAQueryFactory query;
 
     public JpaUserRepository (EntityManager em){
         this.em= em;
@@ -39,10 +40,12 @@ public class JpaUserRepository implements UserRepository{
     }
 
     @Override
-    public List<User> findById(String id) {
-        String jpql = "select t from User t where t.id = :id";
-        return em.createQuery("select t from User t where t.id = :id")
-                .setParameter("id", id)
-                .getResultList();
+    public User findById(String id) {
+//        String jpql = "select t from User t where t.id = :id";
+//        return em.createQuery("select t from User t where t.id = :id")
+//                .setParameter("id", id)
+//                .getResultList();
+        QUser user = QUser.user;
+        return query.select(user).from(user).where(user.id.eq(id)).fetchOne();
     }
 }

@@ -10,5 +10,5 @@ public interface UserRepository {
 
     User findByNum(Long num);
 
-    List<User> findById(String id);
+    User findById(String id);
 }

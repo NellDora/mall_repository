@@ -29,8 +29,8 @@ class OrderServiceTest {
     void Test1() {
         //ID로 유저 찾기의 경우 1개 일테인데 리스트로 받는거 추후 변경 필요
         //입력 조건
-        List<User> findUserResult = userRepository.findById("test");
-        User findUser = findUserResult.get(0);
+        User findUserResult = userRepository.findById("test");
+        User findUser = findUserResult;
 
         //실행 주문 시작
 

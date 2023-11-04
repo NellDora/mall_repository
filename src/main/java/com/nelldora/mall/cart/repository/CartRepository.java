@@ -12,5 +12,5 @@ public interface CartRepository {
 
     Cart findById(Long id);
 
-    Cart findByUserId(String id);
+    Cart findByUserNumber(Long userNum);
 }

@@ -46,13 +46,13 @@ public class UserService {
 
     //아이디 중복 검증
     public void duplicateCheckId(String id) throws IdDuplicationException {
-        List<User> findUsers = new ArrayList<>();
+        User findUsers = null;
         try{
             findUsers = userRepository.findById(id);
         }catch (NullPointerException e){
             log.info("중복 발생 에러가 발생한 것인가");
         }finally {
-            if(!findUsers.isEmpty()) {
+            if(findUsers!=null) {
                 throw new IdDuplicationException("이미 존재하는 아이디 입니다.");
             }else{
                 log.info("UserService : 중복 검사 통과");
@@ -71,7 +71,7 @@ public class UserService {
     }
 
     @Transactional
-    public List<User> findById(String id){
+    public User findById(String id){
          List<User> users = new ArrayList<>();
          return userRepository.findById(id);
     }

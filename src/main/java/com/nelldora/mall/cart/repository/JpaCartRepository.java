@@ -40,10 +40,10 @@ public class JpaCartRepository implements CartRepository{
     }
 
     @Override
-    public Cart findByUserId(String id) {
+    public Cart findByUserNumber(Long userNum) {
         QCart cart = QCart.cart;
         QUser user = QUser.user;
-        return query.select(cart).from(cart).join(cart.user, user).on(user.id.eq(user.id)).fetchFirst();
+        return query.select(cart).from(cart).join(cart.user, user).on(user.userNumber.eq(userNum)).fetchOne();
     }
 
 }
