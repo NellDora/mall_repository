@@ -11,4 +11,6 @@ public interface CartItemRepository {
     CartItem findById(Long id);
 
     List<CartItem> findByCartId(Long id);
+
+    void removeOne(CartItem cartItem);
 }

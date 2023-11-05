@@ -44,4 +44,9 @@ public class JpaCartItemRepository implements CartItemRepository{
         List<CartItem> cartItems = query.select(cartItem).from(cartItem).join(cartItem.cart, cart).on(cart.id.eq(id)).fetch();
         return cartItems;
     }
+
+    @Override
+    public void removeOne(CartItem cartItem) {
+        em.remove(cartItem);
+    }
 }

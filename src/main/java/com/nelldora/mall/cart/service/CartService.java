@@ -63,11 +63,17 @@ public class CartService {
         return cartRepository.findByUserNumber(number);
     }
 
-    public Cart findByUserId (String id){
+    public Cart findByUserIdForCart (String id){
         User findUser = userRepository.findById(id);
 
         return cartRepository.findByUserNumber(findUser.getUserNumber());
     };
 
 
+    //----------------------- 장바구니에서 카트 아이템 제거--------------------------------
+    public void removeOneforCartItem(Long id){
+        CartItem cartItem = cartItemRepository.findById(id);
+        cartItemRepository.removeOne(cartItem);
+    }
+    //----------------------- 장바구니에서 카트 아이템 제거--------------------------------
 }

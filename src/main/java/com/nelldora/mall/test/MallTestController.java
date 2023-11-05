@@ -82,7 +82,7 @@ public class MallTestController {
 
         User findUser = userService.findByNum(user.getUserNumber());
 
-        Cart userCart = cartService.findByUserId(findUser.getId());
+        Cart userCart = cartService.findByUserIdForCart(findUser.getId());
         List<CartItem> cartItems = cartService.findByCartIdForCartItemList(userCart.getId());
 
         model.addAttribute("cartItems", cartItems);
@@ -104,7 +104,7 @@ public class MallTestController {
         OrderCheckState orderCheckState = OrderCheckState.STANDBY;
         response.setContentType("text/html; charset=utf-8");
         User findUser = userService.findById(user.getId());
-        Cart findCart = cartService.findByUserId(findUser.getId());
+        Cart findCart = cartService.findByUserIdForCart(findUser.getId());
         List<CartItem> cartItems = cartService.findByCartIdForCartItemList(findCart.getId());
         orderCheckState = orderService.saveOrder(findUser,cartItems,null  );
 
