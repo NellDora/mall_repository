@@ -6,13 +6,17 @@ import com.nelldora.mall.cart.domain.CartItem;
 import com.nelldora.mall.cart.service.CartService;
 import com.nelldora.mall.item.domain.Item;
 import com.nelldora.mall.item.repository.ItemRepository;
+import com.nelldora.mall.order.controller.Payment;
 import com.nelldora.mall.order.service.OrderService;
 import com.nelldora.mall.order.vo.OrderCheckState;
+import com.nelldora.mall.payment.service.PaymentService;
+import com.nelldora.mall.payment.vo.StoreInfo;
 import com.nelldora.mall.session.SESSION_CON;
 import com.nelldora.mall.user.domain.User;
 import com.nelldora.mall.user.dto.UserDTO;
 import com.nelldora.mall.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +33,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/test")
 @RequiredArgsConstructor
+@Slf4j
 public class MallTestController {
 
     private final BoardService boardService;
@@ -131,5 +136,15 @@ public class MallTestController {
     @GetMapping("/600")
     public String payview(){
         return "mall-test-pay";
+    }
+
+
+    @GetMapping("/700")
+    public String tokenTest(){
+        PaymentService paymentService = new PaymentService();
+        StoreInfo info = new StoreInfo();
+        String token =paymentService.getTokenV2(info);
+        log.info(" 토큰 값은 : ", token);
+        return null;
     }
 }
