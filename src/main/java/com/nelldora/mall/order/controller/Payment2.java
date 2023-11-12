@@ -1,6 +1,6 @@
 package com.nelldora.mall.order.controller;
 
-public class Payment {
+public class Payment2 {
 
     private String imp_uid;
     private String merchant_uid;
@@ -11,10 +11,24 @@ public class Payment {
     private String paid_method; //결제 금액
     private boolean success; //결저 성공 여부
 
-    public Payment() {
+    public Payment2() {
     }
 
-    public Payment(String imp_uid, String merchant_uid) {
+    public static Payment2 createPayment(String impUid, long merchantUid, int paidAmount, String status, String paidMethod,
+                                         boolean success, String pgProvider) {
+        Payment2 paymentDTO = new Payment2();
+        paymentDTO.imp_uid = impUid;
+        paymentDTO.merchant_uid = merchantUid;
+        paymentDTO.paid_amount = paidAmount;
+        paymentDTO.status = status;
+        paymentDTO.paid_method = paidMethod;
+        paymentDTO.success = success;
+        paymentDTO.pg_provider = pgProvider;
+        return paymentDTO;
+    }
+
+
+    public Payment2(String imp_uid, String merchant_uid) {
         this.imp_uid = imp_uid;
         this.merchant_uid = merchant_uid;
     }

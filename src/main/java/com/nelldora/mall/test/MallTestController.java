@@ -6,7 +6,6 @@ import com.nelldora.mall.cart.domain.CartItem;
 import com.nelldora.mall.cart.service.CartService;
 import com.nelldora.mall.item.domain.Item;
 import com.nelldora.mall.item.repository.ItemRepository;
-import com.nelldora.mall.order.controller.Payment;
 import com.nelldora.mall.order.service.OrderService;
 import com.nelldora.mall.order.vo.OrderCheckState;
 import com.nelldora.mall.payment.service.PaymentService;
@@ -26,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.List;
 

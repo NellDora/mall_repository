@@ -1,8 +1,6 @@
 package com.nelldora.mall.order.controller;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class PaymentController {
 
     @PostMapping(value = "/payment", produces ="application/json; charset=utf-8")
-    public ResponseEntity<String> result(@RequestBody Payment payment){
+    public ResponseEntity<String> result(@RequestBody Payment2 payment){
 
         System.out.println("호출 되는지 확인");
         

@@ -1,28 +1,31 @@
 package com.nelldora.mall.payment.domain;
 
-public class PaymentDTO {
+public class Payment {
 
     private String impUid;
     private long merchantUid;
     private int paidAmount;
     private String status;
+
+    private String pgProvider;
     private String paidMethod;
     private boolean success;
 
 
 
-    public PaymentDTO() {
+    public Payment() {
         super();
     }
 
 
-    public static PaymentDTO createPayment(String impUid, long merchantUid, int paidAmount, String status, String paidMethod,
-                                           boolean success) {
-        PaymentDTO paymentDTO = new PaymentDTO();
+    public static Payment createPayment(String impUid, long merchantUid, int paidAmount, String status, String paidMethod,
+                                        boolean success, String pgProvider) {
+        Payment paymentDTO = new Payment();
         paymentDTO.impUid = impUid;
         paymentDTO.merchantUid = merchantUid;
         paymentDTO.paidAmount = paidAmount;
         paymentDTO.status = status;
+        paymentDTO.pgProvider = pgProvider;
         paymentDTO.paidMethod = paidMethod;
         paymentDTO.success = success;
         return paymentDTO;
@@ -71,6 +74,7 @@ public class PaymentDTO {
     }
 
 
-
-
+    public String getPgProvider() {
+        return pgProvider;
+    }
 }

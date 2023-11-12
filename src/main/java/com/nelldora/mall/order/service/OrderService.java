@@ -32,6 +32,10 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
 
+
+    public Order findById (Long id){
+        return orderRepository.findById(id);
+    }
     public OrderCheckState saveOrder(User user, List<CartItem> cartItems , Delivery delivery){
         //OrderCheckState => 주문 생성이 성공했는지 안했는지 확인을 하기 위한 리턴값
         OrderCheckState orderCheckState = OrderCheckState.STANDBY;
